@@ -24,5 +24,8 @@ test-coverage.out
 !.gitignore
 !.github/
 !.golangci.yaml
+!deploy/hail/.env.example
 
 /plcli
+/deploy/hail/data/
+/deploy/hail/backups/

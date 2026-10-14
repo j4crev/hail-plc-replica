@@ -1,0 +1,40 @@
+services:
+  replica:
+    build:
+      context: ../..
+      dockerfile: cmd/plc-replica/Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "sqlite:///data/replica.db?mode=rwc&cache=shared&_journal_mode=WAL"
+      REPLICA_BIND: :6780
+      METRICS_ADDR: :9464
+      UPSTREAM_DIRECTORY_URL: https://plc.directory
+      NUM_WORKERS: ${NUM_WORKERS:-0}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      LOG_JSON: "true"
+    volumes:
+      - ./data:/data
+    expose:
+      - "6780"
+    ports:
+      - "127.0.0.1:${METRICS_PORT:-9464}:9464"
+
+  caddy:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    depends_on:
+      - replica
+    environment:
+      REPLICA_HOST: ${REPLICA_HOST:?set REPLICA_HOST in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

@@ -6,6 +6,10 @@
 
 DID PLC is a self-authenticating [DID](https://www.w3.org/TR/did-core/) which is strongly-consistent, recoverable, and allows for key rotation. See <https://web.plc.directory> for details.
 
+## Hail deployment
+
+The fork's read-replica deployment profile and operations runbook are in [`deploy/hail`](deploy/hail/README.md). The replica remains read-only and follows the canonical `https://plc.directory` registry.
+
 ## License
 
 This project is dual-licensed under MIT and Apache 2.0 terms:

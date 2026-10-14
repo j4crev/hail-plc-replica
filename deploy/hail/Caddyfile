@@ -1,0 +1,4 @@
+{$REPLICA_HOST} {
+	encode zstd gzip
+	reverse_proxy replica:6780
+}
